@@ -7,7 +7,7 @@
 
 /********* FUNCTION DECLARATION *********/
 void onecom(char *bi1, char *bi2, int sum[]);
-void twocom(int sum[], int len);
+void twocom(int sum[], int len, char *bi1, char *bi2);
 void reverse(char *str);
 
 /********* MAIN STARTS HERE **********/
@@ -39,7 +39,8 @@ int main(int argc, char **argv)
    }
 
    onecom(bi1, bi2, sum);
-   twocom(sum, len);
+   twocom(sum, len, bi1, bi2);
+
    exit(0);
 }
 
@@ -105,7 +106,7 @@ void onecom(char *bi1, char *bi2, int sum[])
    return ;
 }
 
-void twocom(int sum[], int len)
+void twocom(int sum[], int len, char *bi1, char *bi2)
 {
    int        i = 0, x1, x2, carry = 0, num, j;
    int        one[MAX], diff[MAX];
@@ -167,7 +168,14 @@ void twocom(int sum[], int len)
    {
       printf("%d", diff[j]);
    }
-   printf(" is the resultant binary value.\n");
+   if (atoi(bi2) > atoi(bi1))
+   {
+      printf(" is the resultant binary value, and its a signed integer.\n");
+   }
+   else
+   {
+      printf(" is the resultant binary value, and its a unsigned integer.\n");
+   }
 
    return ;
 }
