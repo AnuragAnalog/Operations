@@ -9,14 +9,16 @@
 void multiply(int m[], int q[], int len1, int len2);
 int ripple(int m[], int a[], int ind);
 int fulladd(int x, int y, int z, int a[], int ind);
+int itobi(int num, int str[]);
+void bitoi(int str[], int ind);
+int pow2(int ind);
 void reverse(int str[], int len);
 
 /********* MAIN STARTS HERE *********/
 int main(int argc, char **argv)
 {
-   int        i = 0, len1, len2;
+   int        len1, len2, a, b;
    int        m[MAX], q[MAX];
-   char       *str1, *str2;
 
    if (argc != 3)
    {
@@ -24,26 +26,17 @@ int main(int argc, char **argv)
       exit(1);
    }
 
-   str1 = argv[1];
-   str2 = argv[2];
+   a = atoi(argv[1]);
+   b = atoi(argv[2]);
 
-   len1 = strlen(str1);
-   len2 = strlen(str2);
-
-   while (*str1 != '\0')
+   if (a < 0 || b < 0)
    {
-      m[i] = (int)(*str1 - '0');
-      str1++;
-      i++;
+      fprintf(stderr, "It's only for unsigned integers.\n");
+      exit(2);
    }
-   i = 0;
 
-   while (*str2 != '\0')
-   {
-      q[i] = (int)(*str2 - '0');
-      str2++;
-      i++;
-   }
+   len1 = itobi(a, m);
+   len2 = itobi(b, q);
 
    multiply(m, q, len1, len2);
    exit(0);
@@ -101,12 +94,7 @@ void multiply(int m[], int q[], int len1, int len2)
       i++;
    }
 
-   for (i = flen; i >= 0; i--)
-   {
-      printf("%d", a[i]);
-   }
-   printf(" is the resultant value.\n");
-
+   bitoi(a, flen);
    return ;
 }
 
@@ -144,6 +132,64 @@ int fulladd(int x, int y, int z, int a[], int ind)
 
    a[ind] = sum;
    return carry;
+}
+
+int itobi(int num, int str[])
+{
+   int        i = 0, rem, bi = 2;
+
+   do
+   {
+      rem = num % bi;
+      if ((rem >= 0) && (rem <= 1))
+      {
+         str[i++] = rem;
+      }
+   } while ((num /= bi) > 0);
+   reverse(str, i);
+
+   return i;
+}
+
+void bitoi(int str[], int ind)
+{
+   int        i = 0, x = 0, num = 0;
+
+   while (i <= ind)
+   {
+      if ((str[i] == 0) || (str[i] == 1))
+      {
+         x = pow2(i);
+         num = num + str[i] * x;
+      }
+      else
+      {
+         printf("Given string is not a Binary string\n");
+         exit(2);
+      }
+      i++;
+   }
+
+   printf("%d is the resultant value.\n", num);
+   return ;
+}
+
+int pow2(int ind)
+{
+   int        i, base = 1;
+
+   if (ind == 0)
+   {
+      return base;
+   }
+   else
+   {
+      for (i = 0; i < ind; i++)
+      {
+         base = base * 2;
+      }
+      return base;
+   }
 }
 
 void reverse(int str[], int len)

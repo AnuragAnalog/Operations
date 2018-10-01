@@ -11,49 +11,42 @@ void seqmultiply(int c[], int a[], int  m[], int q[], int len1, int len2);
 void reverse(int str[], int nitems);
 void shr(int c[], int a[], int q[], int len1, int len2);
 void ripple(int a[], int m[], int c[], int len1);
+void bitoi(int str[], int ind);
+int pow2(int ind);
+int itobi(int num, int str[]);
 int fulladd(int x, int y, int z, int result[], int ind);
 
 /********* MAIN STARTS HERE *********/
 int main(int argc, char **argv)
 {
-    int        i = 0, len1, len2;
-    int        c[MAXC], a[MAX], q[MAX], m[MAX];
-    char       *str1, *str2;
+   int        len1, len2, num1, num2;
+   int        c[MAXC], a[MAX], q[MAX], m[MAX];
 
-    if (argc != 3)
-    {
-       fprintf(stderr, "Usage: %s <Multiplicand> <Multiplier>.\n", argv[0]);
-       exit(1);
-    }
+   if (argc != 3)
+   {
+      fprintf(stderr, "Usage: %s <Multiplicand> <Multiplier>.\n", argv[0]);
+      exit(1);
+   }
 
-    str1 = argv[1];
-    str2 = argv[2];
+   num1 = atoi(argv[1]);
+   num2 = atoi(argv[2]);
 
-    len1 = strlen(str1);
-    len2 = strlen(str2);
+   if (num1 < 0 || num2 < 0)
+   {
+      fprintf(stderr, "It's only for unsigned integers.\n");
+      exit(2);
+   }
 
-    while (*str1 != '\0')
-    {
-       m[i] = (int)(*str1 - '0');
-       i++;
-       str1++;
-    }
+   len1 = itobi(num1, m);
+   len2 = itobi(num2, q);
 
-    i = 0;
-    while (*str2 != '\0')
-    {
-       q[i] = (int)(*str2 - '0');
-       i++;
-       str2++;
-    }
-
-    seqmultiply(c, a, m, q, len1, len2);
-    exit(0);
+   seqmultiply(c, a, m, q, len1, len2);
+   exit(0);
 }
 
 void seqmultiply(int c[], int a[], int  m[], int q[], int len1, int len2)
 {
-   int        i;
+   int        i, tmp[MAX], k = 0;
 
    reverse(m, len1);
    reverse(q, len2);
@@ -77,18 +70,21 @@ void seqmultiply(int c[], int a[], int  m[], int q[], int len1, int len2)
 
    if (c[0] == 1)
    {
-      printf("1");
+      tmp[k] = 1;
+      k++;
    }
    for (i = len1-1; i >= 0; i--)
    {
-      printf("%d", a[i]);
+      tmp[k] = a[i];
+      k++;
    }
    for (i = len2-1; i >= 0; i--)
    {
-      printf("%d", q[i]);
+      tmp[k] = q[i];
+      k++;
    }
-   printf(" is the resultant value.\n");
 
+   bitoi(tmp, len1+len2);
    return ;
 } 
 
@@ -125,6 +121,49 @@ void shr(int c[], int a[], int q[], int len1, int len2)
    return ;
 }
 
+void bitoi(int str[], int ind)
+{
+   int        i = 0, x = 0, num = 0;
+
+   reverse(str, ind);
+
+   while (i < ind)
+   {
+      if ((str[i] == 0) || (str[i] == 1))
+      {
+         x = pow2(i);
+         num = num + str[i] * x;
+      }
+      else
+      {
+         printf("Given string is not a Binary string\n");
+         exit(2);
+      }
+      i++;
+   }
+
+   printf("%d is the resultant value.\n", num);
+   return ;
+}
+
+int pow2(int ind)
+{
+   int        i, base = 1;
+
+   if (ind == 0)
+   {
+      return base;
+   }
+   else
+   {
+      for (i = 0; i < ind; i++)
+      {
+         base = base * 2;
+      }
+      return base;
+   }
+}
+
 void ripple(int a[], int m[], int c[], int len1)
 {
    int        i = 0, x1, x2, carry = 0;
@@ -159,4 +198,21 @@ int fulladd(int x, int y, int z, int result[], int ind)
 
    result[ind] = sum;
    return carry;
+}
+
+int itobi(int num, int str[])
+{
+   int        i = 0, rem, bi = 2;
+
+   do
+   {
+      rem = num % bi;
+      if ((rem >= 0) && (rem <= 1))
+      {
+         str[i++] = rem;
+      }
+   } while ((num /= bi) > 0);
+   reverse(str, i);
+
+   return i;
 }
